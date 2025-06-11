@@ -37,7 +37,11 @@ class NodoEnario:
 def actualizar_arbol():
     canvas.delete("all")
     posiciones.clear()
-    raiz.calcular_posiciones(300, 40, 160, posiciones)
+    # Obtener el tamaño actual del canvas
+    ancho_canvas = canvas.winfo_width()
+    if ancho_canvas == 1:  # Si aún no se ha renderizado, usar el ancho inicial
+        ancho_canvas = 900
+    raiz.calcular_posiciones(ancho_canvas // 2, 40, 160, posiciones)
     raiz.dibujar(canvas, posiciones, seleccionar_nodo)
 
 def seleccionar_nodo(nodo):
@@ -64,8 +68,10 @@ def agregar_nodo():
 # Crear ventana y canvas de tkinter
 ventana = tk.Tk()
 ventana.title("Árbol N-ario Interactivo")
-canvas = tk.Canvas(ventana, width=600, height=400, bg="white")
+canvas = tk.Canvas(ventana, width=900, height=700, bg="white")
 canvas.pack()
+canvas.bind("<Configure>", lambda event: actualizar_arbol())
+# Configurar el canvas para que se ajuste al tamaño de la ventana
 
 # Widgets para agregar nodos
 frame = tk.Frame(ventana)
